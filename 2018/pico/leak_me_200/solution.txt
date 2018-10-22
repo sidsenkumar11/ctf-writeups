@@ -1,0 +1,3 @@
+Create a name long enough that it overflows into the password buffer.
+
+Then, there won't be a null byte at the end of the name buffer, so the program will print out the whole password when it prints your name.

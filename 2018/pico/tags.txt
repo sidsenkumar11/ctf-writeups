@@ -1,0 +1,55 @@
+are you root?
+
+assembly_3:
+- writing assembly
+- compiling assembly
+- x86-64
+
+be_quick_or_be_dead_2:
+- large number calculations in register only overflows high order bits
+- nth fibonnaci number
+
+be_quick_or_be_dead_3:
+- constructive dynamic programming
+
+buffer_overflow_3:
+- brute force static canary bytes
+
+echo_back:
+- format string
+- GOT overwrite
+- PLT function
+
+electric:
+- block cipher
+- CTR mode
+- insecure ctr function (static counter)
+
+got_2_learn_libc:
+- libc database lookup
+
+keygen_me_2:
+- z3
+- constraint solving
+- reversing binary
+
+leak_me:
+- buffer overflow
+- leak data
+
+recovering_from_the_snap:
+- didn't include this in writeups repo because disk image was large
+- photorec
+- testdisk
+- recover deleted files from image
+
+spyfi:
+- block cipher
+- ECB mode
+- inject plaintext to be encrypted
+
+super_safe_rsa_3:
+- didn't include challenge because no point
+- multi-prime factor RSA
+- ensure your prime factors are really prime!
+- https://www.alpertron.com.ar/ECM.HTM

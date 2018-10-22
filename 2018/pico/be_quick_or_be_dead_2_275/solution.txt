@@ -1,0 +1,6 @@
+Just calculate the nth fibonacci number online.
+
+The interesting thing is that even if the intermediate numbers overflow the register, the low order bits of the solution will remain the same as if the calculation had continued normally.
+
+So just calculate the nth fibonacci number like normal, then just enter a number equal to the lower bits of the nth fib number that fit within the register.
+

@@ -1,0 +1,26 @@
+Confirm protections on binaries:
+    - rabin2 -I <binary>
+    - checksec <binary>
+
+Get Function Names
+    - Imported from shared libraries
+        - rabin2 -i <binary>
+    - Only those written by programmer (approximation)
+        - rabin2 -qs <binary> | grep -ve imp -e ' 0 '
+
+If the binary isn't position independent, the previous step will also find the function locations.
+Reading .got.plt entries tells you locations of imported functions.
+
+Strings
+    - rabin2 -z <binary>
+    - Better than 'strings' utility since only yields strings programmer placed in binary
+
+-----------
+Pitfalls
+-----------
+/usr/bin/bash
+    - calling system() incorrectly in GDB calls this binary.
+
+Stack alignment may matter
+Stack location may matter
+    - If you pivot and place the chain in the .data section, you may not have infinite space before you start getting to non-writable memory.

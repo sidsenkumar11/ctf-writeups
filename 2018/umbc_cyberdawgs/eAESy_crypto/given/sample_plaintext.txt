@@ -1,0 +1,6 @@
+So I decided 2 be a nice person and give you a test file, so you
+can see what the output of this program looks like. Unfortunately, I didn't give
+you the flag, which means you'll have to figure it out on your own :}
+
+If no one gets this challenge, it'll make this Dawg pretty sad, s0 pleas3 so1ve
+it for me before the end of the CTF :_{

@@ -1,0 +1,18 @@
+authorized_keys:
+- mind your ps and qs
+- shared factors in multiple moduli
+- PEM key
+- RSA
+
+cache:
+- python cache simulator
+- timing inference attack
+- infer data in memory from time it takes to access
+- multithreaded
+
+chi_bard:
+- USB keyboard traffic
+- wireshark
+
+whitelist:
+- Regex DOS

@@ -1,0 +1,4 @@
+robbys_pwnoff:
+- proof of work
+- shellcode
+- bypass random xor

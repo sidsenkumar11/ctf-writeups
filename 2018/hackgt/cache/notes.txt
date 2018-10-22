@@ -1,0 +1,101 @@
+Cache is a cache simulator written in Python! It can be used to measure the latency of different access patterns.
+
+PyCache's memory unit has 256 bytes of memory. The memory is byte-addressable. It has a 32-wide fully associative cache. It has four registers (a, b, c, and d) that can be used to hold byte values.
+
+- Load flag byte
+- Load guess_addr byte so guess_addr is in cache
+- Store something in flag byte addr
+	- if cache hit, guess_addr is flag byte
+	- if cache miss, guess_addr is not flag byte
+
+Instructions:
+
+0. clear - Clear the cache clear
+
+1. ld $dst_reg $addr
+	- Load from address specified in $addr into the reg $dst_reg.
+
+	ld a 10
+		- read the byte at address 10 into register a
+
+
+2. ldi $dst_reg $addr_reg
+	- Load the value from the address specified in $addr_reg into $dst_reg.
+
+	ldi b c
+		- If register c is 55, read the byte at address 55 into register a
+
+
+3. st $value_reg, $addr
+	- Store the value from register $value_reg into address $addr.
+
+	st a 10
+		- store the byte in register a into address 10
+
+
+4. sti $value_reg, $addr_reg
+	- Store the value in register $value_reg into the address specified by $addr_reg.
+
+	sti c d
+		- If register d is 27, store the value in register c into address 27
+
+
+5. mvl $dst_reg, $value
+	- Move the literal $value into register $dst_reg.
+
+	mvl a 190
+		- Set register a to 190
+
+
+6. mvr $dst_reg, $src_reg
+	- Move the value in $src_reg into register $dst_reg.
+
+	mvr a b
+		- If register b is 255, set register a to 255.
+
+
+Each time you issue a command, PyCacheSim will reply with the amount of time it took to execute the command.
+
+
+Find it here: 18.208.150.174:9191
+
+
+=================================================
+Processor
+	- Takes path to flag
+	- Has a memory object
+	- 4 registers
+	- writes flag file bytes to memory[0], memory[1], memory[2], ...
+	- Clears cache
+	-
+
+Memory
+	- Read
+		- If it's in the cache, return from cache
+		- Else
+			- Get from memory
+			- Wait
+			- Write value to cache
+	- Write
+		- 0 <= value <= 255
+		- Cache and memory BOTH get written (write-through)
+
+	- clear_cache()
+		- calls clear cache
+
+Cache
+	- Read
+		- If addr in cache
+			- Update timestamp
+			- Return value
+		- Else throw error
+	- Write
+		- If addr in cache
+			- Just set the value and update tiemstamp
+		- Else
+			- If size at max (32)
+				- evict an entry by choosing smallest time stamp (LRU)
+			- Set the value and update the timestamp
+
+	- clear
+		- Empties the cache

@@ -1,0 +1,5 @@
+eAESy_crypto:
+- block cipher
+- CFB mode
+- AES
+- known plaintext

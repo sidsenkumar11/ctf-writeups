@@ -1,0 +1,6 @@
+Would be interested in seeing a writeup for this.
+
+I just googled the offsets of the libc functions in a libc database.
+Then, I downloaded the libc and found the offset to system from the addresses I already knew, and used that address to call system('bin/sh')
+https://libc.blukat.me/
+

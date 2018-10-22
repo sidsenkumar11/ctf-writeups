@@ -1,0 +1,8 @@
+number_guess:
+- format string
+- leak data
+
+letter:
+- format string
+- GOT overwrite
+- flag function

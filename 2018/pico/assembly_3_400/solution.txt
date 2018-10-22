@@ -1,0 +1,1 @@
+Just compile and link using nasm and then run it.
