@@ -1,0 +1,63 @@
+==================
+Give bytes input
+==================
+
+Example:
+	- hex: 0x01010101
+
+	./arg_input_echo `printf '\x01\x01\x01\x01'`
+
+===================
+Print ABCD
+===================
+
+echo -e '\x41\x42\x43\x44'
+
+printf '\x41\x42\x43\x44`
+
+python -c 'print "\x41\x42\x43\x44"'
+
+perl -e 'print "\x41\x42\x43\x44";'
+
+=======================
+Print 100 As
+=======================
+
+python -c 'print "A" * 100'
+
+
+========================
+Input to Binaries
+========================
+
+1. Argument
+------------
+./vulnerable `your_command_here`
+./vulnerable $(your_command_here)
+
+2. Input
+-------------
+your_command_here | ./vulnerable
+
+or
+
+your_command_here > filename
+./vulnerable < filename
+
+============================
+GDB IO
+============================
+
+1. Argument
+------------------
+r $(your_command_here)
+
+2. Input
+------------------
+r < <(your_command_here)
+
+or
+
+your_command_here > filename
+r < filename
+

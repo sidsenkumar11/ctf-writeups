@@ -1,0 +1,66 @@
+============================
+x86 Register Diagram
+============================
+
+        --------------------------------------
+EAX     |              AX  |   AH   |   AL   |
+        --------------------------------------
+
+EAX = 32 bits
+AX = Lower 16 bits
+AH = Higher 8 bits of lower 16 bits
+AL = Lower 8 bits of lower 16 bits
+
+ESI, EDI, ESP, and EBP are all 32-bits
+
+===================
+Basic Assembly
+===================
+
+------------------
+DWORD PTR
+------------------
+mov edx, DWORD PTR [0x41424344]
+	- Move the 4-byte value at address 0x41424344 into edx
+
+mov ecx, DWORD PTR [edx]
+	- Move the 4-byte value at the address in edx, into ecx
+
+-------------------
+Arithmetic
+-------------------
+inc edx
+	- edx++
+
+dec ebx
+	- ebx--
+
+xor eax, eax
+	- eax = eax ^ eax
+	- Equivalent to zeroing out eax
+
+or edx, 0x1337
+	- edx = edx | 0x1337
+
+
+----------------------
+Stack Manipulation
+----------------------
+push ebx
+	- sub esp, 4
+	- mov DWORD PTR [esp], ebx
+
+pop ebx
+	- mov ebx, DWORD PTR[esp]
+	- add esp, 4
+
+------------------------
+Calling/Returning
+------------------------
+call some_function
+	- push eip
+	- mov eip, some_function ; not actually valid
+
+ret
+	- pop eip ; not actually valid
+

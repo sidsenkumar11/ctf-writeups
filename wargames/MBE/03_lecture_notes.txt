@@ -1,0 +1,88 @@
+================================
+ELF Memory Layout
+================================
+
+--------------------------- Low Addresses
+| Text (code) segment     |
+---------------------------
+| Data segment            |
+---------------------------
+| bss segment             |
+---------------------------
+| Heap segment            |
+|                         |
+| Heap grows down to high |
+| memory addresses vv     |
+|                         |
+|                         |
+| Stack grows up to   ^^  |
+| low memory addresses    |
+|                         |
+|  Stack segment          |
+--------------------------- High Addresses
+
+
+
+=====================================
+Virtual Memory Layout
+=====================================
+
+------------------------------------
+Memory Model with Shared Libraries
+------------------------------------
+
+
+-------------------------------
+| Kernel Text and Data        |
+-------------------------------
+| User text                   |  \
+-------------------------------   |
+| User data                   |   |
+|                             |   |
+|                             |   |
+|                             |   |
+-------------------------------   |
+| Shared library text         |   |
+| and data                    |   | - Process Virtual Memory
+-------------------------------   |
+|                             |   |
+|                             |   |
+|                             |   |
+|                             |   |
+|                             |   |
+|                             |   |
+|                             |   |
+| User stack                  |  /
+-------------------------------  \
+|                             |   |
+|                             |   | - Kernel Virtual Memory
+|                             |   |
+-------------------------------  /
+
+==========================
+GDB Commands
+==========================
+
+- disas main
+- set disassembly-flavor intel
+- s (step into)
+- n (step over)
+
+- x/NFU address
+	- N = Number
+	- F = format
+	- U = Unit
+	- Ex: x/10xb 0xdeadbeef - examine 10 bytes at 0xdeadbeef in hex
+
+- Use python in GDB
+	- python print 'a' * 10
+
+-----------------
+Tracing
+-----------------
+ltrace
+	- Library Calls
+
+strace
+	- System Calls
+

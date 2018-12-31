@@ -1,0 +1,128 @@
+=============================
+CMU Bomb Lab
+=============================
+
+32-bit Binary
+There are 6 phases, each of which requires a specific input to be defused.
+There is also 1 secret phase that can be unlocked after all 6 initial phases are completed.
+
+-----------
+Phase 1
+-----------
+Direct string comparison
+Input: "Public speaking is very easy."
+
+-----------
+Phase 2
+-----------
+Read 6 numbers with conditions
+	- nums[0] = 1
+	- for all others:
+		- current index value = previous number in array * index of next number
+
+index: 0   1   2   3   4   5
+list:  1   2   6   24  120 720
+
+Input: 1 2 6 24 120 720
+
+-----------
+Phase 3
+-----------
+Reads number, character, number
+
+num1 indicates which switch case to go into.
+Inside the case, a value gets set which must match the inputted character and num2 is checked against a value.
+
+So, going into any case statement will work as long as num2 and the character are the appropriate values.
+
+I will take case 0:
+Input: 0 q 777
+
+-----------
+Phase 4
+-----------
+Reads number
+
+Checks if func4(number) == 55
+func4 is a fibonacci(n) calculator.
+
+so, we need fib(n) == 55.
+fib(0) = 1
+fib(1) = 1
+fib(2) = 2
+fib(3) = 3
+fib(4) = 5
+fib(5) = 8
+fib(6) = 13
+fib(7) = 21
+fib(8) = 34
+fib(9) = 55
+n should therefore be 9.
+
+Input: 9
+
+-----------
+Phase 5
+-----------
+Reads a string
+
+String length must be 6
+There is a hard-coded array of letters.
+The string I give must be a list of values that index into that array, such that the values spell out "giants".
+
+e.g. if 'g' is index 3 in the hardcoded array, the first character I supply in my string is chr(3).
+
+result = [15, 0, 5, 11, 13, 1]
+Pre-Input: ''.join([chr(x) for x in result])
+
+Tricky part: We need to input weird characters like "0" (null byte). But, phase 5 performs a check on the string length to see if it's equal to 6. To bypass this, we notice that the byte value is first binary ANDed with 0xf before being used as an index. So, we can just add 16 to each number in the array before creating the character, so we don't have NULL bytes but will still get an index 0.
+
+e.g. If we need index 0, we send 0x10. 0x10 & 0xf = 0, so we still get index 0.
+
+To get them to all be readable characters, add 64 instead of 16.
+
+result = [15, 0, 5, 11, 13, 1]
+string = ''.join([chr(x + 64) for x in result])
+Input: O@EKMA
+
+-----------
+Phase 6
+-----------
+Reads 6 numbers
+
+Each number must be less than or equal to 6.
+Each number must be unique.
+So, the numbers are some permutation of 0-5.
+
+Next, we are introduced to some singly-linked list of nodes.
+We create a list of pointers to nodes from the list. This list is created in the order specified by the input nums.
+	- e.g. If the input nums array contains 2, 3, and 1, then the list contains &node2, &node3, and &node1).
+
+Next, we reconstruct the linked list by overwriting the next pointers so that the linked list now points in the order specified by the list.
+	- e.g. If given 2, 3, and 1, then the new linked list has 2 -> 3 -> 1 as indicated by next pointers.
+
+Lastly, phase 6 explodes if the value at index i in the new linked list is ever less than the value at index i + 1.
+So, we just need to order the nodes such that the values never match that condition (so decreasing order).
+
+Input: 4 2 6 3 1 5
+
+-----------
+Secret Phase
+-----------
+There is also a secret phase, which is only unlocked after all 6 phases are completed. In phase 4, we only needed to input a number. If we also input the string "austinpowers" after the number, we will unlock the secret phase.
+
+Reads a number
+
+The number must be <= 1001 and will get passed to fun7(), whose return value must be 7 to pass this phase.
+fun7 is a recursive function which returns -1, 0, 2 * fun7(), or 2 * fun7() + 1.
+
+whole function must return 7.
+number must be > 36.
+next recursion must return 3.
+number must be > 50.
+next recursion must return 1.
+number must be > 107.
+next recursion must return 0.
+number must be = 1001
+
+Input: 1001

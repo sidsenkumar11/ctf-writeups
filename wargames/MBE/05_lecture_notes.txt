@@ -1,0 +1,77 @@
+Shellcode
+
+	- Set of instructions injected by the user and executed by the exploited binary.
+	- Injecting code that was never in the binary.
+
+execve(shell[0], shell, NULL);
+exit(0);
+
+Problem:
+
+	- When you write your shellcode as a string, null bytes become a problem.
+	- String functions use the null byte to denote the end of the string.
+
+Solution:
+	- Make shellcode NULL free!
+	- Ex. Load only into al instead of eax if it's a small value.
+
+Optimizations:
+	- Clear a register:
+		- xor eax, eax
+	- Clear three registers in just four bytes.
+		- xor ebx, ebx
+		- mul ebx
+		- This clears ebx, eax, and edx
+
+Syscalls
+	- syscall # is loaded into eax
+	- arguments for call are placed in different registers
+	- int 0x80 executes call to syscall()
+	- CPU switches to kernel mode
+
+Writing Shellcode
+
+	Ex. exit(0) as shellcode
+
+	Section .text
+	global _start
+
+	_start:
+		xor ebx, ebx
+		xor eax, eax
+		mov al, 1
+		int 0x80
+
+Compiling Shellcode
+	1) nasm -f elf exit_shellcode.asm
+	2) ld -o exit_shellcode exit_shellcode.o
+	3) objdump -M intel -d exit_shellcode
+
+Tools
+	- pwntools
+	- asm
+	- disasm
+	defuse.ca/online-x86-assembler.htm
+	- shtest
+
+Pre-made shellcode:
+	- http://shell-storm.org/shellcode/files/shellcode-811.php
+
+NOP Sleds
+	- NOP = '\x90'
+	- If you don't know the exact address of the shellcode in memory, pad it with NOPS to make it more reliable.
+
+Functions
+-------------------------
+
+fgets
+	- Reads stdin until input length
+
+scanf and gets
+	- Read until terminating character, more unsafe
+
+gets and fgets don't stop reading at nulls but do stop at new lines.
+
+http://shell-storm.org/
+http://www.exploit-db.com/shellcode/
+

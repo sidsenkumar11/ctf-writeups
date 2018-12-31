@@ -1,0 +1,45 @@
+Common Format Strings
+=========================
+
+Char	Type	Usage
+--------------------------------
+d	4-bytes		Integer
+u	4-bytes		Unsigned Integer
+x	4-bytes		Hex
+s	4-byte ptr	String
+c	1-byte		Character
+
+Length Modifiers:
+
+hh	1-byte		char
+h 	2-byte		short int
+l	4-byte		long int
+ll	8-byte		long long int
+
+Examples
+	- %hd = 2-byte short
+	- printf("%03d.%03d.03d.%03d", 127, 0, 0, 1);
+		127.000.000.001
+	- printf("%.2f", 5.6732)
+		5.67
+	- printf("%#010x", 3735928559);
+		0xdeadbeef
+
+Use format strings to write to memory addresses
+---------------------------------------------------------
+
+%n does not print anything; it indicates that the argument after the format string is a pointer to a signed integer where a count of the number of characters being printed will be stored.
+
+	Ex. Count bytes written:
+		- printf("%s%n", "01234", &n);
+			n = 5
+
+Access parameters to printf function
+-----------------------------------------
+
+printf("%<arg#>$<format>");
+
+Let's say you want to read the value of argument 3 in printf.
+$ printf("%3$d", 101, 202, 303);
+	303
+

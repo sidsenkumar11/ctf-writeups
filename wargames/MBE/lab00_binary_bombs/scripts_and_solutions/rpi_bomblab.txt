@@ -1,0 +1,67 @@
+=============================
+RPI Bomb Lab
+=============================
+
+There are 4 wires that need to be removed to defuse the bomb.
+We need to enter passwords to cut the wires.
+
+------------
+Yellow Wire
+------------
+Byte-by-byte comparison.
+The password is: 84371065
+
+------------
+Green Wire
+------------
+
+There is a variable ("remain_engaged") that is initialized to 1. If remain_engaged is set to 0 by the end of the function, then the wire gets disengaged.
+
+After the initialization, user input gets read into a buffer and strncpy is called to check the first 8 bytes of the input against a hard coded string, "dcaotdae".
+
+If there is a match, remain_engaged = remain_engaged == 0 gets called, which will turn the 1 to a 0. Unfortunately, within the same basic block, remain_engaged = remain_engaged == 0 is called again, resetting remain_engaged to 1 (the program prints something like "action overridden!").
+
+To get around this, we notice that the input read function has a buffer overflow. It reads up to 20 bytes into a 12 byte buffer. So, we can overflow the buffer and overwrite remain_engaged with a value of our choosing. We just need to make sure the first 8 bytes of our overflow are still "dcaotdae" so we pass the strncmp check. After filling up the buffer, we can overwrite remain_engaged with whatever we want. The value we overwrite with doesn't matter, just that it ends with a 0-bit. Why?
+
+The remain_engaged = remain_engaged == 0 call is done in assembly with the following:
+> mov eax, remain_engaged # from memory to reg
+> and eax, 1
+> test eax, eax           # Sets the zero flag if eax = 0
+> sete al                 # Sets al to 1 if zero flag is set, 0 otherwise
+> movzx eax, al
+> mov remain_engaged, eax # from reg to memory
+
+Basically, the last bit in remain_engaged is binary ANDed with 1 before being tested if it's 0.
+Usually, this bit would contain a 1, since remain_engaged is initialized with 1.
+If we overwrite remain_engaged such that the last bit is a 0, then the binary AND will yield a 0, so remain_engaged will get set to 1.
+Then, this gets undone so remain_engaged will get set to 0, and so we can remove the green wire!
+
+(Input below overwrites "remain_engaged" with BBB\n)
+Input: dcaotdaeAAAABBB
+
+------------
+Blue Wire
+------------
+
+The blue wire takes input a sequence of "L"s and "R"s.
+There is an in-memory graph data structure in the DATA section.
+Each node has a numerical value, a left node pointer and a right node pointer.
+
+Upon visiting a node, a variable ("result") is xored with the node's value.
+If at any point result == a hardcoded desired value (0x40475194), then the wire is disengaged.
+
+To solve this, I created a Python script which constructs an in-core graph and brute-forces the sequence of edges to visit until I get a sequence yielding the result. Unfortuantely, the graph had cycles so it was possible to loop infinitely. For my algorithm, I hoped/assumed that I would never need to cycle to reach a desired result.
+
+TODO: I am unsure of what I would have needed to do if the solution required cycles.
+
+Input: LLRR
+
+------------
+Red Wire
+------------
+
+The red wire function printed 3 random seed numbers, did a sequence of computations on them, and checked if the input number was the same as the final result.
+
+I could emulate the same sequence of computations given the seeds, so I was able to easily feed the desired end number to the program.
+
+Input: Variable, but ususally KDG3DU32D38EVVXJM64

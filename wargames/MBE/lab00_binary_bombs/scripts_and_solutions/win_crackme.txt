@@ -1,0 +1,2 @@
+This was a simple Windows crackme challenge.
+The program takes an input number and checks if the sum of digits is 15. If so, the password is good.

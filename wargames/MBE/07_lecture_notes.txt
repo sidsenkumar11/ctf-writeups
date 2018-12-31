@@ -1,0 +1,74 @@
+Data Execution Prevention (DEP)
+	- Ensures only code segments are ever marked executable
+	- Meant to mitigate code injection / shellcode payloads
+	- AKA DEP, NX, XN, XD, W^X
+
+No segments of memory should ever be writable and executable at the same time.
+
+Common Data Segments
+	- Stack
+	- Heap
+	- .bss
+	- .ro
+	- .data
+
+Common Code Segments
+	- .text
+	- .plt
+
+DEP implemented 2004-2006, beginning of modern exploit mitigation.
+
+Bypassing DEP means using existing code segments - usually ROP.
+
+----------------------------
+Return Oriented Programming
+----------------------------
+
+ROP:
+	- A technique in exploitation to reuse existing code gadgets in a target binary as a method to bypass DEP.
+
+Gadget:
+	- A sequence of meaningful instructions typically follwed by a return instruction.
+	- Usually multiple gadgets chained to compute malicious actions.
+	- Chains called ROP Chains.
+
+Finding ROP Gadgets
+	- ROPgadget --binary ./file_name
+	- asm:
+		- easy way to get the bytes for desired gadgets
+	- gdbpeda:
+		- searchmem: find raw bytes in an executing program
+		- ropsearch: a crappy rop gadget finder
+	- python:
+		- def q(addr):
+			return struct.pack("I", addr)
+
+Typically, you can only use one gadget worth of execution.
+	- Usually only have one targeted overwrite rather than straight stack smash.
+	- Solution: Stack Pivoting
+
+Use your one gadget to move ESP to a more favorable location.
+	- add esp, 0xXXXX
+	- sub esp, 0xXXXX
+	- ret 0xXXXX
+	- leave
+	- xchg eXX, esp
+
+You may not find an exact pivot/you may need to pivot multiple times.
+You can pad your ROP Chains with ROP NOPs.
+	- Gadgets that point to ret's.
+
+-------------
+ret2libc
+-------------
+ROP technique
+	- Return to functions in standard libraries (libc) instead of using gadgets
+
+	- If you know addresses of functions in libc, ret2libc is easier than making a ROP chain with gadgets
+
+Common ret2libc targets
+	- system()
+		- system("cat flag.txt")
+	- (f) open(), read(), write()
+		- Open/read/write file contents
+

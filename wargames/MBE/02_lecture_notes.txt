@@ -1,0 +1,62 @@
+=======================
+Hex Editors / Viewers
+=======================
+
+GUI - wxHexEditor
+CLI - xxd
+
+The strings utility displays ASCII strings > 4 characters long.
+
+
+==========================
+Checking File Similarity
+==========================
+
+1) Run md5sum on both files.
+	- Upload hashes to virustotal.com
+	- Google search the hash
+
+2) Fuzzy Hashing
+	- ssdeep -b original.elf > hash.txt
+	- ssdeep -bm hash.txt modified.elf
+
+=============================
+Command Line Disassembly
+=============================
+objdump -d
+
+Convert hex to decimal
+- echo $((0xDEADBEEF))
+
+==============================
+IDA Pro Basics
+==============================
+
+Change between basic and graphical mode
+	- Space bar
+
+Rename Variables
+	- n
+
+Comment
+	- Side: (:), (;)
+	- Above/below: (ins)
+
+Convert Constant Formats
+	- Right-click
+
+Cross-Reference
+	- x
+
+Change to array
+	- (a)
+
+===========================
+Stack Growth
+===========================
+
+In a function call:
+	- Arguments are pushed onto the stack right to left.
+	- Old EIP
+	- Old EBP
+	- Local vars in new function
