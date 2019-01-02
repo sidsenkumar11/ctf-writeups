@@ -116,32 +116,32 @@ i_c4ll_wh4t_i_w4nt_n00b
 Lab 2A
 ------------------------
 
-The program asks for 10 words of input using fgets and stdin. However, the call to fgets allows for 16 bytes, though the buffer itself is only 12 bytes.
-So, we overflow the buffer by putting in more than 12 bytes, overwriting other data on the stack. From observation, we can see that the number being overwritten is the current word number.
+The program asks for 10 words using fgets from stdin. The call to fgets allows for 16 bytes, but the buffer itself is only 12 bytes, so there is an obvious buffer overflow. Immediately below the buffer on the stack is the index i, so we are able to overwrite the value of i with whatever we like by simply entering a word larger than 12 bytes.
 
-In the assembly, the code continues executing so long as we are not equal to 10 (for 10 words), since it expects the counter to go from 0 to 10. If we overwrite the current word number with a number larger than 10, then we can indefinitely input words.
+The input loop continues so long as "i" is not equal to 10 (for 10 words), since it expects the counter to go from 0 to 9. If we overwrite the current word number with a number larger than 10, then we can (almost) indefinitely input words.
 
-Every time a word is inputted, its first letter is placed into a buffer for storage (the program function is to echo back the first letters of each word you inputted).
-By inputting an indefinite number of words, we overflow the buffer storing the first letters as well.
-Eventually, the first letters buffer will overflow into the stack and overwrite the old base pointer and the return address.
+Every time a word is entered, its first character is placed into a separate buffer for storage. At the end of the program, this buffer gets printed out.
 
-Construction the payload:
-	- 12 characters to fill the buffer.
-	- 13th character >= 10 in ASCII (the counter gets incremented after we input our letters, so 10 is ok as well) to overwrite the current word number.
-	- 19 "A\n"s to represent 19 words entered (19 was determined from experimentation). This is overflowing the first letters buffer with "A"s.
-	- 4 "A\n"s to overwrite the old base pointer.
+By inputting a large number of words, we overflow the buffer storing the first characters since there is no check to see if we are writing past its bounds.
+
+Eventually, we can overflow the first letters buffer to overwrite the old base pointer and the return address.
+
+Constructing the payload:
+	- Overflow payload
+		- 12 characters to fill the word buffer.
+		- 13th character >= 10 in ASCII (the counter gets incremented after we input our letters, so 10 is ok as well) to overwrite a byte in the current value of "i".
+		- Needs to be sent 24 times since the return address is 24 bytes below the start of the first chars buffer.
 	- Address of the shell function, where each byte is separated by a new line (since it's the first letters array that's actually doing the overflowing).
 	- Final newline to break out of the "entering words" loop.
 
-
-python -c 'print "AAAABBBBCCCC\n" + "A\n" * 19 + "A\n" * 4 + "\xfd\n\x86\n\x04\n\x08\n" + "\n"' > /tmp/pwnscript
+python -c 'print "AAAABBBBCCCC\n" * 24 + "\xfd\n\x86\n\x04\n\x08\n" + "\n"' > /tmp/pwnscript
 (cat /tmp/pwnscript; cat) | ./lab2A
 
 Things Learned:
-	- fgets with stdin does make sure to only accept n bytes, but there's nothing you can do if n is incorrect!
+	- fgets with stdin only accepts up to n - 1 bytes! It reserves the last byte of the buffer for a NULL byte.
 	- fgets with stdin terminates on null bytes or new line characters.
 		- So, if you input many bytes without a new line, the remaining bytes after n get queued and used as the next "stdin" value.
-	- fgets keeps the newline character in the buffer
+		- It also keeps any following newline characters in the buffer
 	- If you need a shell after your overflow, you need the "cat" command to keep stdin open; else the program will just end since stdin is closed.
 		- The best way to do it is write your bytes to a file, then cat the bytes like so:
 			- (cat file; cat) | ./lab2A
