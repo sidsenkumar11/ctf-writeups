@@ -150,13 +150,15 @@ Things Learned:
 Lab 3C
 ------------------------
 This problem had us injecting shellcode to get a shell. There are two calls to fgets and both can be overflowed.
-- The first call writes to a buffer in the data section (global variable buffer).
+- The first call writes to a buffer in the data section (global buffer).
 - The second call writes to a buffer in the stack.
 
-We can overflow the stack buffer with shellcode and jump back to it by overwriting the return address with the address of the shellcode.
-However, the address of the shellcode will change between GDB and the actual binary - making for a game of guess-and-check.
+We could overflow the stack buffer with shellcode and jump back to it by overwriting the return address with the address of the shellcode.
 
-An easier way was to write the shellcode in the data section by overflowing the first buffer. This location will be fixed, unlike the stack that gets environment variables added and removed.
+However, the address of the shellcode on the stack will get randomized since ASLR is on.
+
+An easier way is to write the shellcode in the data section by overflowing the first buffer. This location will be fixed, unlike the stack. Fortunately, this section is also executable, so we can still execute this shellcode.
+
 Since fgets reads until a new line, but the strcmp compares until a null byte, we can pass the null byte check by using the following input:
 
 	python -c 'print "rpisec\x00" + "\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80\n" + "A" * 80 + "\x47\x9c\x04\x08"' > /tmp/file
