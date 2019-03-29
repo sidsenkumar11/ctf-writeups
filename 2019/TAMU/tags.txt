@@ -1,0 +1,13 @@
+veggie_tales:
+- Python
+- Untrusted Pickle
+- Remote Code Execution
+
+prodkey:
+- Basic angr
+- Reverse Engineering
+- keygen
+
+birdboxchallenge:
+- Blind SQLi
+- Leak database tables
