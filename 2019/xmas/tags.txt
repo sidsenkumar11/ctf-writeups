@@ -1,0 +1,10 @@
+chip9:
+- C++
+- Emulation
+- Rendering
+
+the_elf_postmaster:
+- Binary Exploitation
+- SROP
+- Limited syscalls
+
