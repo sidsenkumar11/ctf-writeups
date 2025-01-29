@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css?family=Press Start 2P');
+@import "normalize.css";
+
+*,
+*:after,
+*:before {
+	box-sizing: border-box;
+}
+
+html {
+	color-scheme: light only;
+}
+
+body {
+	display: flex;
+	place-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	touch-action: none;
+	font-family:  "Press Start 2P", sans-serif;
+  padding: 1rem;
+}
+
+body::before {
+	--line: color-mix(in lch, canvasText 25%, transparent);
+	--size: 60px;
+	content: "";
+	height: 100vh;
+	width: 100vw;
+	position: fixed;
+	background-color: black;
+
+	background-image: 
+	  linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+	  linear-gradient(180deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+	background-size: 50px 50px; /* Adjust the size as needed */
+	top: 0;
+	z-index: -1;
+	box-shadow: 0 0 10px rgba(0, 255, 255, 0.8), 0 0 20px rgba(0, 255, 255, 0.8), 0 0 30px rgba(0, 255, 255, 0.8);
+
+}
+
+article {
+	width: 600px;
+	aspect-ratio: 2 / 1.1;
+	min-height: 350px;
+	position: relative;
+	overflow: hidden;
+	border-radius: 4em;
+	max-width: calc(100% - 2rem);
+  background: hsl(0 0% 50%);
+}
+
+article > img {
+	position: absolute;
+	top: 0;
+	left: 50%;
+	translate: -50% 0;
+	height: 100%;
+	width: 660px;
+	-o-object-fit: cover;
+	   object-fit: cover;
+	-o-object-position: center 43%;
+	   object-position: center 43%;
+	-webkit-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+	pointer-events: none;
+}
+
+:root {
+  --x: 0;
+  --y: 0;
+}
+
+article > img:first-of-type {
+	filter: saturate(1.5) brightness(0.9);
+	-o-object-position: calc(-50% + (var(--x) * 30px)) calc(43% + (var(--y) * -20px));
+	   object-position: calc(-50% + (var(--x) * 30px)) calc(43% + (var(--y) * -20px));
+}
+
+article > img:last-of-type {
+	-o-object-position: calc(-50% + (var(--x) * 40px)) calc(43% + (var(--y) * -40px));
+	   object-position: calc(-50% + (var(--x) * 40px)) calc(43% + (var(--y) * -40px));
+}
+
+article h3 {
+	position: absolute;
+	left: 50%;
+	top: 6%;
+	margin: 0;
+	font-size: 8rem;
+	translate: -50% 0;
+	text-transform: uppercase;
+	font-family: 'Bebas Neue', sans-serif;
+	color: white;
+	translate: calc(-50% + (var(--x) * -30px)) calc(var(--y) * -20px);
+}
+
+.content {
+	min-height: 22%;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	color: white;
+	display: grid;
+	gap: 0.2rem;
+	place-items: center;
+	align-content: center;
+	padding-bottom: .5rem;
+}
+
+.content svg {
+	width: 20px;
+}
+
+.content p {
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 1.2rem;
+}
+
+.content p:last-of-type {
+	opacity: 0.8;
+}
+
+/* Blurring */
+.blur {
+	position: absolute;
+	inset: 60% 0 -26% 0;
+	filter: blur(20px);
+	overflow: hidden;
+}
+
+.blur img {
+	-o-object-position: calc(-50% + (var(--x) * 40px)) calc(47.5% + (var(--y) * -40px));
+	   object-position: calc(-50% + (var(--x) * 40px)) calc(47.5% + (var(--y) * -40px));
+	-o-object-fit: cover;
+	   object-fit: cover;
+	left: 50%;
+	translate: -50% 0;
+	height: 330px;
+	position: absolute;
+	bottom: 25%;
+	width: 660px;
+	-webkit-mask: radial-gradient(50% 100% at 50% 90%, white 50%, transparent);
+	        mask: radial-gradient(50% 100% at 50% 90%, white 50%, transparent);
+  filter: saturate(1.5) brightness(0.8);
+}
+
+:where(.x-link, .bear-link):is(:hover, :focus-visible) {
+	opacity: 1;
+}

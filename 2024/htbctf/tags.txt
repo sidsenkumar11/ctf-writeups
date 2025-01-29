@@ -1,0 +1,2 @@
+web_jigglingnfts:
+    PHP magic hash
